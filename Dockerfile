@@ -20,7 +20,7 @@ RUN apt-get -q update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # config / playbook / roles
-ADD ansible /opt/ansible
+COPY ansible /opt/ansible
 COPY ${APP_ENV}.config /opt/ansible/config/group_vars/all
 COPY run.sh /opt/run.sh
 COPY build.sh /opt/build.sh

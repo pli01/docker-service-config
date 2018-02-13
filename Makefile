@@ -28,6 +28,8 @@ stop:
 logs:
 	$(sudo) docker-compose $(compose_args) logs
 
+package:
+	bash ./tools/package.sh
 test: unit-test
 	@echo '$@ SUCCESS'
 
