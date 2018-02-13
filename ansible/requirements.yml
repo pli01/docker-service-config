@@ -1,0 +1,17 @@
+# from http
+- src: https://github.com/pli01/ansible-nexus3-oss/archive/master.tar.gz
+  name: nexus3-oss
+- src: https://github.com/pli01/ansible-gitlab-config/archive/master.tar.gz
+  name: gitlab-config
+
+## from git
+#- src: https://github.com/pli01/ansible-nexus3-oss
+#  version: master
+#  name: nexus3-oss
+#
+#- src: https://github.com/pli01/ansible-gitlab-config
+#  version: master
+#  name: gitlab-config
+#
+# from galaxy
+#- src: pli01.ansible-gitlab-config

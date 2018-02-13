@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  service-config:
+    build:
+      context: .
+      args:
+        - http_proxy=$http_proxy
+        - https_proxy=$https_proxy
+        - no_proxy=$no_proxy
+    entrypoint: /docker-entrypoint.sh service-config
+    environment:
+      - http_proxy=$http_proxy
+      - https_proxy=$https_proxy
+      - no_proxy=$no_proxy,nexus
+      - nexus=http://localhost:8081/nexus
+      - SERVICE_CONFIG_NEXUS_ENABLE=${SERVICE_CONFIG_NEXUS_ENABLE:-true}
+      - SERVICE_CONFIG_GITLAB_ENABLE=${SERVICE_CONFIG_GITLAB_ENABLE:-true}
+      - SERVICE_CONFIG_JENKINS_ENABLE=${SERVICE_CONFIG_JENKINS_ENABLE:-true}

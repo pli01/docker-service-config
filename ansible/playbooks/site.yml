@@ -1,0 +1,9 @@
+---
+- name: Configure nexus
+  hosts: nexus
+  roles:
+    - nexus3-oss
+- name: Configure gitlab
+  hosts: gitlab
+  roles:
+    - gitlab-config
