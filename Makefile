@@ -1,5 +1,5 @@
 #
-PACKAGENAME ?= docker-service-config # $(shell echo $$(basename $$(pwd)))
+PACKAGENAME ?= docker-service-config
 IMAGE_NAME ?= ci-tool-stack/service-config
 VERSION ?= latest
 
