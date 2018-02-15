@@ -28,7 +28,7 @@ logs:
 	$(sudo) docker-compose $(compose_args) logs
 
 rmi:
-	$(sudo) docker rmi $(IMAGE_NAME):$(VERSION)
+	$(sudo) docker rmi $(IMAGE_NAME):$(VERSION) || true
 
 ### packaging ###
 # 
@@ -66,4 +66,4 @@ push:
 	@echo '# $@ SUCCESS'
 
 clean-image:
-	$(sudo) docker rmi $(IMAGE_NAME):$(VERSION)
+	$(sudo) docker rmi $(IMAGE_NAME):$(VERSION) || true
