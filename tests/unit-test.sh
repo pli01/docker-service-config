@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Check ansible version"
+echo "Display test config"
 docker-compose config
 
 echo "Check ansible version"
