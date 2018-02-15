@@ -1,6 +1,9 @@
 #!/bin/bash
 
 echo "Check ansible version"
+docker-compose config
+
+echo "Check ansible version"
 docker-compose run --name "test-service-config" --rm --entrypoint "/docker-entrypoint.sh"  service-config /usr/bin/ansible --version
 
 echo "Check ansible syntax-check"

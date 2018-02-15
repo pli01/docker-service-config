@@ -3,12 +3,12 @@ version: '3'
 services:
   service-config:
     image: ci-tool-stack/service-config:${VERSION:-latest}
-    build:
-      context: .
-      args:
-        - http_proxy=$http_proxy
-        - https_proxy=$https_proxy
-        - no_proxy=$no_proxy
+#    build:
+#      context: .
+#      args:
+#        - http_proxy=$http_proxy
+#        - https_proxy=$https_proxy
+#        - no_proxy=$no_proxy
     entrypoint: /docker-entrypoint.sh service-config
     environment:
       - http_proxy=$http_proxy

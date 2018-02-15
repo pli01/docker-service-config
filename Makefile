@@ -5,13 +5,14 @@ sudo ?= # sudo -E
 compose_args += -f docker-compose.yml
 compose_args += $(shell [ -f  docker-compose.$(env).yml ] && echo "-f docker-compose.$(env).yml")
 
+.PHONY: clean-image
 all: stop rm up
 clean:
 	$(sudo) docker system prune -f
 config:
 	$(sudo) docker-compose $(compose_args) config
 
-build:
+build: config
 	$(sudo) docker-compose $(compose_args) build
 pull:
 	$(sudo) docker-compose $(compose_args) pull
@@ -26,10 +27,14 @@ stop:
 logs:
 	$(sudo) docker-compose $(compose_args) logs
 
+rmi:
+	$(sudo) docker rmi $(IMAGE_NAME):$(VERSION)
+
 ### packaging ###
 # 
 # PACKAGENAME = relative basename path of this dir
 PACKAGENAME ?= $(shell echo $$(basename $$(pwd)))
+IMAGE_NAME ?= ci-tool-stack/service-config
 VERSION ?= latest
 #
 version:
@@ -38,17 +43,27 @@ package:
 	@echo '# $@ STARTING'
 	@bash ./tools/package.sh $(PACKAGENAME) $(VERSION)
 	@echo '# $@ SUCCESS'
-test: build unit-test
-	@echo '# $@ SUCCESS'
 clean-package:
 	rm -rf dist ||true
+
+test: build unit-test
+	@echo '# $@ SUCCESS'
+
 
 unit-test:
 	@echo '# $@ STARTING'
 	( cd tests && bash unit-test.sh $(PACKAGENAME) $(VERSION) )
 	@echo '# $@ SUCCESS'
 
-publish: dist/$(PACKAGENAME)-$(VERSION).tar.gz
+publish: package dist/$(PACKAGENAME)-$(VERSION).tar.gz
 	@echo "# $@ STARTING"
 	bash ./tools/publish.sh $(PACKAGENAME) $(VERSION)
 	@echo '# $@ SUCCESS'
+
+push:
+	@echo "# $@ STARTING"
+	bash ./tools/push.sh $(IMAGE_NAME) $(VERSION)
+	@echo '# $@ SUCCESS'
+
+clean-image:
+	$(sudo) docker rmi $(IMAGE_NAME):$(VERSION)
