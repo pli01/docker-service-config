@@ -1,6 +1,6 @@
 project ?=
-env ?= dev
-sudo ?= sudo -E
+env ?= # dev
+sudo ?= # sudo -E
 
 compose_args += -f docker-compose.yml
 compose_args += $(shell [ -f  docker-compose.$(env).yml ] && echo "-f docker-compose.$(env).yml")
@@ -11,10 +11,8 @@ clean:
 config:
 	$(sudo) docker-compose $(compose_args) config
 
-build: prepare
+build:
 	$(sudo) docker-compose $(compose_args) build
-prepare:
-	( cd ansible && ansible-galaxy install -r requirements.yml -p roles )
 pull:
 	$(sudo) docker-compose $(compose_args) pull
 up:
@@ -28,12 +26,29 @@ stop:
 logs:
 	$(sudo) docker-compose $(compose_args) logs
 
+### packaging ###
+# 
+# PACKAGENAME = relative basename path of this dir
+PACKAGENAME ?= $(shell echo $$(basename $$(pwd)))
+VERSION ?= latest
+#
+version:
+	@echo $(PACKAGENAME) $(VERSION)
 package:
-	bash ./tools/package.sh
-test: unit-test
-	@echo '$@ SUCCESS'
+	@echo '# $@ STARTING'
+	@bash ./tools/package.sh $(PACKAGENAME) $(VERSION)
+	@echo '# $@ SUCCESS'
+test: build unit-test
+	@echo '# $@ SUCCESS'
+clean-package:
+	rm -rf dist ||true
 
 unit-test:
-	@echo '$@ STARTING'
-	( cd tests && bash unit-test.sh )
-	@echo '$@ SUCCESS'
+	@echo '# $@ STARTING'
+	( cd tests && bash unit-test.sh $(PACKAGENAME) $(VERSION) )
+	@echo '# $@ SUCCESS'
+
+publish: dist/$(PACKAGENAME)-$(VERSION).tar.gz
+	@echo "# $@ STARTING"
+	bash ./tools/publish.sh $(PACKAGENAME) $(VERSION)
+	@echo '# $@ SUCCESS'
