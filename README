@@ -1,5 +1,8 @@
 # service-config
 
+[![Build Status](https://travis-ci.org/pli01/docker-service-config.svg?branch=master)](https://travis-ci.org/pli01/docker-service-config)
+
+
 This service will configure (nexus,gitlab) via there REST API
   * it use ansible
   * roles nexus3-oss
