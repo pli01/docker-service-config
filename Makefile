@@ -1,3 +1,8 @@
+#
+PACKAGENAME ?= docker-service-config # $(shell echo $$(basename $$(pwd)))
+IMAGE_NAME ?= ci-tool-stack/service-config
+VERSION ?= latest
+
 project ?=
 env ?= # dev
 sudo ?= # sudo -E
@@ -32,10 +37,6 @@ rmi:
 
 ### packaging ###
 # 
-# PACKAGENAME = relative basename path of this dir
-PACKAGENAME ?= $(shell echo $$(basename $$(pwd)))
-IMAGE_NAME ?= ci-tool-stack/service-config
-VERSION ?= latest
 #
 version:
 	@echo $(PACKAGENAME) $(VERSION)
