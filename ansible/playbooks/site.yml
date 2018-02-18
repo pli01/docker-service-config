@@ -2,8 +2,11 @@
 - name: Configure nexus
   hosts: nexus
   roles:
-    - nexus3-oss
+    - role: nexus3-oss
+      when: ansible_env.SERVICE_CONFIG_NEXUS_ENABLE is defined and ansible_env.SERVICE_CONFIG_NEXUS_ENABLE == "true"
+
 - name: Configure gitlab
   hosts: gitlab
   roles:
-    - gitlab-config
+    - role: gitlab-config
+      when: ansible_env.SERVICE_CONFIG_GITLAB_ENABLE is defined and ansible_env.SERVICE_CONFIG_GITLAB_ENABLE == "true"

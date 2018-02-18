@@ -1,0 +1,5 @@
+---
+- name: Configure gitlab
+  hosts: gitlab
+  roles:
+    - gitlab-config
