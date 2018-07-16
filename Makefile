@@ -1,7 +1,7 @@
 #
 PACKAGENAME ?= docker-service-config
 IMAGE_NAME ?= ci-tool-stack/service-config
-VERSION ?= latest
+VERSION ?= $(shell [ -f VERSION ] && cat VERSION)
 
 project ?=
 env ?= # dev
@@ -10,17 +10,23 @@ sudo ?= # sudo -E
 compose_args += -f docker-compose.yml
 compose_args += $(shell [ -f  docker-compose.$(env).yml ] && echo "-f docker-compose.$(env).yml")
 
-.PHONY: clean-image
+.PHONY: clean-image config
 all: stop rm up
 clean:
+	rm -rf Dockerfile.template Dockerfile.$(VERSION)
 	$(sudo) docker system prune -f
+.PHONY: config
 config:
-	$(sudo) docker-compose $(compose_args) config
+	$(sudo) VERSION=$(VERSION) docker-compose $(compose_args) config
 
-build: config
-	$(sudo) docker-compose $(compose_args) build
+.PHONY: build
+prepare:
+	cp Dockerfile Dockerfile.template
+	sed -e 's|\(FROM .*\):\(.*\)|\1:$(VERSION)|' Dockerfile.template > Dockerfile.$(VERSION)
+build: prepare config
+	$(sudo) VERSION=$(VERSION) docker-compose $(compose_args) build
 pull:
-	$(sudo) docker-compose $(compose_args) pull
+	$(sudo) VERSION=$(VERSION) docker-compose $(compose_args) pull
 up:
 	$(sudo) docker-compose $(compose_args) up -d
 restart:
@@ -47,6 +53,7 @@ package:
 clean-package:
 	rm -rf dist ||true
 
+.PHONY: test
 test: build unit-test
 	@echo '# $@ SUCCESS'
 
