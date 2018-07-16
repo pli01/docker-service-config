@@ -10,9 +10,8 @@ ENV SERVICE_CONFIG_JENKINS_ENABLE true
 
 # Use nexus repo to speed up build if MIRROR_DEBIAN defined
 RUN echo "$APP_ENV $http_proxy $no_proxy" && set -x && [ -z "$MIRROR_DEBIAN" ] || \
-     sed -i.orig -e "s|http://deb.debian.org/debian|$MIRROR_DEBIAN/debian9|g ; s|http://security.debian.org|$MIRROR_DEBIAN/debian9-security|g" /etc/apt/sources.list
-
-RUN apt-get -q update && \
+     sed -i.orig -e "s|http://deb.debian.org/debian|$MIRROR_DEBIAN/debian9|g ; s|http://security.debian.org/debian-security|$MIRROR_DEBIAN/debian9-security|g" /etc/apt/sources.list ; \
+    apt-get -q update && \
     apt-get install -qy --no-install-recommends --force-yes \
     curl jq ansible python-apt \
       git  && \
