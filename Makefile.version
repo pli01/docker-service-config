@@ -1,0 +1,3 @@
+#
+PACKAGENAME ?= docker-service-config
+IMAGE_NAME ?= ci-tool-stack/service-config
