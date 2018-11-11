@@ -1,4 +1,7 @@
 #!/bin/bash
+set -x
+image_name=${1:? $(basename $0) IMAGE_NAME VERSION needed}
+VERSION=${2:-latest}
 
 echo "Display test config"
 docker-compose config
